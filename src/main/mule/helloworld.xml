@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6d4c705d-b446-48ac-8b55-38cc4b6d5705" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="helloworldFlow" doc:id="f887b081-87b5-484f-a652-a074b0643519" >
+		<http:listener doc:name="Listener" doc:id="90b4ab93-e265-4bac-8f83-f84bda2350e9" config-ref="HTTP_Listener_config" path="/sujitha"/>
+		<logger level="INFO" doc:name="Logger" doc:id="f70542c0-0403-4f1c-9768-f7cf1bd447bc" message="#[attributes.queryParams.name]"/>
+		<ee:transform doc:name="Transform Message" doc:id="8595606e-c8d1-403e-85e4-b91548013316">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Status":"Success",
+	"Message": attributes.queryParams.name
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="aaa0bacb-d160-4335-8e3e-71f82a8cf2f7" message="#[payload]"/>
+	</flow>
+</mule>
